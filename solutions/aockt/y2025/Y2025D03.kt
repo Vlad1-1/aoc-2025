@@ -25,7 +25,7 @@ object Y2025D03 : Solution {
         parseInput(input).sumOf {
             var goodIndices = 0..it.size - 12
             var result: Long = 0
-            for (i in 1..12) {
+            while (goodIndices.last < it.size) {
                 var maxIndex = goodIndices.first
                 for (j in goodIndices)
                     if (it[j] > it[maxIndex])
