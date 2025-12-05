@@ -25,7 +25,7 @@ object Y2025D05 : Solution {
         var first = firstIt.next().first
         var last = lastIt.next().last
         while (first != Long.MAX_VALUE || last != Long.MAX_VALUE) {
-            if (first <= last + 1) {
+            if (first < last) {
                 if (currentNesting++ == 0)
                     set.add(Pair(first, true))
                 first = if (firstIt.hasNext()) firstIt.next().first else Long.MAX_VALUE
