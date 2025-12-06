@@ -15,23 +15,24 @@ object Y2025D05 : Solution {
         )
     }
 
-    private fun computeSet(ranges: List<LongRange>): TreeSet<Pair<Long, Boolean>> {
+    private fun computeSet(ranges: List<LongRange>): TreeSet<LongRange> {
         val sortedByFirst = ranges.sortedBy { it.first }
         val sortedByLast = ranges.sortedBy { it.last }
-        val set = sortedSetOf<Pair<Long, Boolean>>(comparator = compareBy { it.first })
+        val set = sortedSetOf<LongRange>(comparator = compareBy { it.first })
         val firstIt = sortedByFirst.iterator()
         val lastIt = sortedByLast.iterator()
         var currentNesting = 0
         var first = firstIt.next().first
         var last = lastIt.next().last
+        var rangeBegin = 0L
         while (first != Long.MAX_VALUE || last != Long.MAX_VALUE) {
-            if (first < last) {
+            if (first <= last) {
                 if (currentNesting++ == 0)
-                    set.add(Pair(first, true))
+                    rangeBegin = first
                 first = if (firstIt.hasNext()) firstIt.next().first else Long.MAX_VALUE
             } else {
                 if (--currentNesting == 0)
-                    set.add(Pair(last + 1, false))
+                    set += rangeBegin..last
                 last = if (lastIt.hasNext()) lastIt.next().last else Long.MAX_VALUE
             }
         }
@@ -41,12 +42,9 @@ object Y2025D05 : Solution {
     override fun partOne(input: String): Any {
         val (ranges, ingredients) = parseInput(input)
         val set = computeSet(ranges)
-        return ingredients.count { set.floor(Pair(it, true))?.second == true }
+        return ingredients.count { set.floor(it..it)?.contains(it) == true }
     }
 
     override fun partTwo(input: String) =
-        computeSet(parseInput(input).first)
-            .zipWithNext()
-            .filter { it.first.second }
-            .sumOf { it.second.first - it.first.first }
+        computeSet(parseInput(input).first).sumOf { it.last - it.first + 1}
 }
