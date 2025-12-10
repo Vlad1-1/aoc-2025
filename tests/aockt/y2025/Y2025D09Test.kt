@@ -18,5 +18,16 @@ class Y2025D09Test : AdventSpec<Y2025D09>({
         """.trimIndent() shouldOutput 50
     }
 
-    partTwo()
+    partTwo {
+        """
+            7,1
+            11,1
+            11,7
+            9,7
+            9,5
+            2,5
+            2,3
+            7,3
+        """.trimIndent() shouldOutput 24
+    }
 })
